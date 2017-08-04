@@ -1,6 +1,6 @@
 {
     "name": "diogoko/boring-php",
-    "version": "0.1.0",
+    "description": "Primitives for a boring PHP application",
     "require-dev": {
         "phpunit/phpunit": "6.2"
     },
