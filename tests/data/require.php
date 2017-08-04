@@ -1,0 +1,1 @@
+(myGlobal=<?= isset($myGlobal) ? json_encode($myGlobal) : 'not set' ?>)(var1=<?= isset($var1) ? json_encode($var1) : 'not set' ?>)(var2=<?= isset($var2) ? json_encode($var2) : 'not set' ?>)
