@@ -1,6 +1,7 @@
 {
     "name": "diogoko/boring-php",
     "description": "Primitives for a boring PHP application",
+    "license": "MIT",
     "require-dev": {
         "phpunit/phpunit": "6.2"
     },
