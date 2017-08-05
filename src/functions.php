@@ -84,8 +84,16 @@ function http_normalized_path_info($request_uri = null, $script_name = null) {
     return $path;
 }
 
-function http_accept($mime) {
-    return isset($_SERVER['HTTP_ACCEPT']) && strpos($_SERVER['HTTP_ACCEPT'], $mime) !== false;
+function error_to_exception_handler($severity, $message, $file, $line) {
+    if ((error_reporting() & $severity) === 0) {
+        return;
+    }
+    
+    throw new ErrorException($message, 0, $severity, $file, $line);
+}
+
+function http_request_accept($mime) {
+    return strpos($_SERVER['HTTP_ACCEPT'], $mime) !== false;
 }
 
 function preg_build_from_path($path) {
@@ -99,4 +107,36 @@ function json_send($data) {
 
 function json_from_request_body() {
     return json_decode(file_get_contents('php://input'), true);
+}
+
+function redirect($url) {
+    header("Location: $url");
+    exit();
+}
+
+function array_map_keys($array, $callback) {
+    return array_combine(array_map($callback, array_keys($array)), array_values($array));
+}
+
+function session_get($key) {
+    if (!session_id()) {
+        session_start();
+    }
+    
+    return $_SESSION[$key] ?? null;
+}
+
+function session_put($key, $value) {
+    if (!session_id()) {
+        session_start();
+    }
+
+    $_SESSION[$key] = $value;
+}
+
+function session_delete($key) {
+    $value = session_get($key);
+    unset($_SESSION[$key]);
+    
+    return $value;
 }
