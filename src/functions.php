@@ -140,3 +140,50 @@ function session_delete($key) {
     
     return $value;
 }
+
+
+function topological_sort($graph) {
+    $sort = new \MJS\TopSort\Implementations\FixedArraySort();
+
+    foreach ($graph as $from => $to_list) {
+        if (!empty($to_list)) {
+            $sort->add($from, $to_list);
+        }
+        
+        foreach ($to_list as $dep) {
+            $sort->add($dep);
+        }
+    }
+
+    return $sort->sort();
+}
+
+
+function dependencies_filter($graph, $deps) {
+    $filtered = [];
+    while (!empty($deps)) {
+        $d = array_shift($deps);
+
+        if (!empty($graph[$d])) {
+            $neighbors = $graph[$d];
+            $filtered[$d] = $neighbors;
+            $deps = array_merge($deps, $neighbors);
+        }
+    }
+
+    return $filtered;
+}
+
+
+function array_flatten($arrays) {
+    if (count($arrays) === 0) {
+        return [];
+    }
+
+    return call_user_func_array('array_merge', $arrays);
+}
+
+
+function array_values_from_keys($array, $keys) {
+    return array_values(array_intersect_key($array, array_flip($keys)));
+}
