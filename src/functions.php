@@ -184,6 +184,11 @@ function array_flatten($arrays) {
 }
 
 
+function array_filter_keys($array, $keys) {
+    return array_intersect_key($array, array_flip($keys));
+}
+
+
 function array_values_from_keys($array, $keys) {
-    return array_values(array_intersect_key($array, array_flip($keys)));
+    return array_values(array_filter_keys($array, $keys));
 }
