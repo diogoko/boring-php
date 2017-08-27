@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-class HTTPNormalizedPathInfoTest extends TestCase {
+class HttpNormalizedPathInfoTest extends TestCase {
     
     public function testAll() {
         $this->assertEquals('/', http_normalized_path_info('/my_app', '/my_app/index.php'));

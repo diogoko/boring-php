@@ -11,6 +11,11 @@ class HttpRequestAcceptTest extends TestCase {
     public function tearDown() {
         unset($_SERVER);
     }
+
+    public function testNotSet() {
+        $_SERVER = [];
+        $this->assertFalse(http_request_accept('application/json'));
+    }
     
     public function testHTML() {
         $_SERVER['HTTP_ACCEPT'] = 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8';

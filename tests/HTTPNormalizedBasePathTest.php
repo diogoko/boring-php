@@ -2,7 +2,7 @@
 
 use PHPUnit\Framework\TestCase;
 
-class HTTPNormalizedBasePathTest extends TestCase {
+class HttpNormalizedBasePathTest extends TestCase {
     
     public function testAll() {
         $this->assertEquals('/my_app', http_normalized_base_path('/my_app', '/my_app/index.php'));

@@ -93,7 +93,7 @@ function error_to_exception_handler($severity, $message, $file, $line) {
 }
 
 function http_request_accept($mime) {
-    return strpos($_SERVER['HTTP_ACCEPT'], $mime) !== false;
+    return strpos($_SERVER['HTTP_ACCEPT'] ?? '', $mime) !== false;
 }
 
 function preg_build_from_path($path) {
