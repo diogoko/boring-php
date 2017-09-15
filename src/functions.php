@@ -72,11 +72,53 @@ function child_template_end($parent, $locals = []) {
 }
 
 
+/**
+ * If this flag is passed to the `preg_match_pattern_array` function, each key of the patterns
+ * array will be used as a regular expression to be searched.
+ *
+ * This flag cannot be used together with the `PREG_MATCH_VALUE` flag.
+ */
 define('PREG_MATCH_KEY', 1);
+
+
+/**
+ * If this flag is passed to the `preg_match_pattern_array` function, each value of the patterns
+ * array will be used as a regular expression to be searched.
+ *
+ * This flag cannot be used together with the `PREG_MATCH_KEY` flag.
+ */
 define('PREG_MATCH_VALUE', 0);
+
+
+/**
+ * If this flag is passed to the `preg_match_pattern_array` function, the key of the patterns
+ * array will be returned if the corresponding regular expression matches.
+ *
+ * This flag cannot be used together with the `PREG_RETURN_VALUE` flag.
+ */
 define('PREG_RETURN_KEY', 2);
+
+
+/**
+ * If this flag is passed to the `preg_match_pattern_array` function, the value of the patterns
+ * array will be returned if the corresponding regular expression matches.
+ *
+ * This flag cannot be used together with the `PREG_RETURN_KEY` flag.
+ */
 define('PREG_RETURN_VALUE', 0);
 
+
+/**
+ * Perform multiple regular expression matches.
+ *
+ * @param string[] $patterns The patterns to be searched for
+ * @param string $subject The input string
+ * @param array $matches If matches is provided, then it is filled
+ *                       with the results of search just like the `preg_match` function
+ * @param int $flags Can be `PREG_OFFSET_CAPTURE` combined with `PREG_MATCH_KEY` (or `PREG_MATCH_VALUE`) combined with `PREG_RETURN_KEY` (or `PREG_RETURN_VALUE`)
+ * @param int $offset The alternate place from which to start the search (in bytes)
+ * @return mixed The first pattern that matched according to the flags, or null if there was no match
+ */
 function preg_match_pattern_array($patterns, $subject, &$matches = null, $flags = PREG_MATCH_VALUE | PREG_RETURN_VALUE, $offset = 0) {
     $preg_match_flags = $flags & PREG_OFFSET_CAPTURE;
     foreach ($patterns as $key => $value) {
@@ -240,6 +282,15 @@ function array_map_keys($array, $callback) {
 }
 
 
+/**
+ * Get a value from the session, initializing the session if needed 
+ * and handling non-existing keys.
+ *
+ * Beware that this function returns null for non-existing keys.
+ *
+ * @param string $key The key of the value
+ * @return mixed The value of the key in the session or null if not found
+ */
 function session_get($key) {
     if (!session_id()) {
         session_start();
@@ -249,6 +300,12 @@ function session_get($key) {
 }
 
 
+/**
+ * Set a value in the session, initializing the session if needed.
+ *
+ * @param string $key The key to be used to store the value
+ * @param mixed $value The value to be stored
+ */
 function session_put($key, $value) {
     if (!session_id()) {
         session_start();
@@ -258,6 +315,14 @@ function session_put($key, $value) {
 }
 
 
+/**
+ * Delete a value from the session.
+ *
+ * Beware that this function returns null for non-existing keys.
+ *
+ * @param string $key The key of the value to be deleted
+ * @return mixed The value of the key that was deleted
+ */
 function session_delete($key) {
     $value = session_get($key);
     unset($_SESSION[$key]);
@@ -266,6 +331,17 @@ function session_delete($key) {
 }
 
 
+/**
+ * Calculate a topological sort of a dependency graph.
+ *
+ * The dependency graph is encoded as an adjacency list in which each
+ * key is a node and each value is the array of nodes that the key depends
+ * on. Only strings are supported as nodes.
+ *
+ * @param array $graph The dependency graph to be analysed
+ * @return array A sequence of nodes where a node's dependencies are always before
+ *               the node itself
+ */
 function topological_sort($graph) {
     $sort = new \MJS\TopSort\Implementations\FixedArraySort();
 
@@ -283,6 +359,19 @@ function topological_sort($graph) {
 }
 
 
+/**
+ * Create a subgraph from a dependency graph that contains only some
+ * of the nodes and their dependencies.
+ *
+ * The dependency graph is encoded as an adjacency list in which each
+ * key is a node and each value is the array of nodes that the key depends
+ * on. Only strings are supported as nodes.
+ *
+ * @param array $graph The dependency graph to be analysed
+ * @param array $deps The list of nodes to be included in the subgraph
+ * @return array The subgraph containing only the nodes of the $deps parameter
+ *               and their dependencies (including transitive)
+ */
 function dependencies_filter($graph, $deps) {
     $filtered = [];
     while (!empty($deps)) {
@@ -299,6 +388,12 @@ function dependencies_filter($graph, $deps) {
 }
 
 
+/**
+ * Flatten a list of arrays into one continuous array.
+ *
+ * @param array $arrays The array of arrays
+ * @return array An array that is the concatenation of all arrays
+ */
 function array_flatten($arrays) {
     if (count($arrays) === 0) {
         return [];
@@ -308,11 +403,25 @@ function array_flatten($arrays) {
 }
 
 
+/**
+ * Filter an array by its keys.
+ *
+ * @param array $array The array to be filtered
+ * @param array $keys The keys that are to be kept
+ * @return array The array containing only the filtered keys and their values
+ */
 function array_filter_keys($array, $keys) {
     return array_intersect_key($array, array_flip($keys));
 }
 
 
+/**
+ * Return all the values of an array by their keys.
+ *
+ * @param array The array to be filtered
+ * @param array The list of keys to be kept
+ * @return array The values whose keys matched the list
+ */
 function array_values_from_keys($array, $keys) {
     return array_values(array_filter_keys($array, $keys));
 }
